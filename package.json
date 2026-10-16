@@ -1,0 +1,22 @@
+{
+  "name": "crm-nuxt",
+  "private": true,
+  "type": "module",
+  "description": "Vision Group CRM front end (Nuxt 4) — talks to the existing Strapi CMS through a server-side session.",
+  "scripts": {
+    "dev": "nuxt dev",
+    "build": "nuxt build",
+    "preview": "nuxt preview",
+    "start": "node --env-file=.env .output/server/index.mjs",
+    "typecheck": "nuxt typecheck"
+  },
+  "dependencies": {
+    "nuxt": "^4.5.2",
+    "vue": "^3.5.22",
+    "vue-router": "^4.5.1"
+  },
+  "devDependencies": {
+    "typescript": "~5.9.3",
+    "vue-tsc": "^3.3.13"
+  }
+}
