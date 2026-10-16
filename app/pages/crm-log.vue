@@ -95,9 +95,9 @@ const dictate = () => {
 
 <style scoped>
 .seg-ctl { display: flex; gap: 4px; background: #E6E6E1; padding: 4px; border-radius: 12px; overflow-x: auto; }
-.seg-ctl button { flex: 1; min-height: 44px; border: 0; background: transparent; border-radius: 9px; font-weight: 600; color: var(--ink-2); cursor: pointer; white-space: nowrap; padding: 0 10px; }
+.seg-ctl button { flex: 1; min-height: var(--ctl); border: 0; background: transparent; border-radius: 9px; font-weight: 600; color: var(--ink-2); cursor: pointer; white-space: nowrap; padding: 0 10px; }
 .seg-ctl button[aria-pressed='true'] { background: #fff; color: var(--ink); box-shadow: 0 1px 2px rgba(0, 0, 0, .12); }
 .tap { background: var(--blue); color: #fff; border-radius: 999px; padding: 1px 7px; font-size: 11px; margin-right: 4px; letter-spacing: 0; }
-.mic { position: absolute; right: 8px; top: 8px; width: 44px; height: 44px; border-radius: 50%; border: 0; background: var(--blue-soft); color: var(--blue-ink); display: flex; align-items: center; justify-content: center; cursor: pointer; }
+.mic { position: absolute; right: 8px; top: 8px; width: var(--ctl); height: var(--ctl); border-radius: 50%; border: 0; background: var(--blue-soft); color: var(--blue-ink); display: flex; align-items: center; justify-content: center; cursor: pointer; }
 .mic.on { background: var(--blue); color: #fff; }
 </style>

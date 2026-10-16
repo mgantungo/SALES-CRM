@@ -89,17 +89,17 @@ const ROLE: Record<string, string> = { account_lead: 'Account lead', relationshi
             <NuxtLink v-for="o in openOpps" :key="o.id" :to="`/crm/deals/${o.id}`" class="list-row click">
               <div class="grow"><strong>{{ o.title }}</strong><div class="muted">{{ o.stage?.name }}<template v-if="o.next_action"> · Next: {{ o.next_action }}</template></div></div>
               <span v-if="o.overlap_flag && o.overlap_resolution === 'none'" class="chip c-warn">Overlap</span>
-              <span class="mono" style="font-weight: 600">{{ crmMoney(o.expected_revenue, false) }}</span>
+              <span class="num">{{ crmMoney(o.expected_revenue, false) }}</span>
             </NuxtLink>
             <div v-if="!openOpps.length" class="muted" style="padding: 10px 0">No open deals.</div>
           </section>
           <section class="card pad stack">
             <div class="between"><h2>Money</h2><span class="chip c-fin">Finance</span></div>
             <div class="grid-auto" style="grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 12px">
-              <div><div class="label">Contracted</div><div class="mono" style="font-size: 18px; font-weight: 600">{{ crmMoney(d.money.contracted, false) }}</div></div>
-              <div><div class="label">Invoiced</div><div class="mono" style="font-size: 18px; font-weight: 600">{{ crmMoney(d.money.invoiced, false) }}</div></div>
-              <div><div class="label">Received</div><div class="mono" style="font-size: 18px; font-weight: 600">{{ crmMoney(d.money.received, false) }}</div></div>
-              <div><div class="label">Overdue</div><div class="mono" style="font-size: 18px; font-weight: 600" :style="{ color: d.money.overdue ? 'var(--red-ink)' : undefined }">{{ crmMoney(d.money.overdue, false) }}</div></div>
+              <div><div class="label">Contracted</div><div class="num-md">{{ crmMoney(d.money.contracted, false) }}</div></div>
+              <div><div class="label">Invoiced</div><div class="num-md">{{ crmMoney(d.money.invoiced, false) }}</div></div>
+              <div><div class="label">Received</div><div class="num-md">{{ crmMoney(d.money.received, false) }}</div></div>
+              <div><div class="label">Overdue</div><div class="num-md" :style="{ color: d.money.overdue ? 'var(--red-ink)' : undefined }">{{ crmMoney(d.money.overdue, false) }}</div></div>
             </div>
           </section>
           <section class="card pad stack">

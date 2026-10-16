@@ -18,9 +18,9 @@ const agingTotal = computed(() => d.value ? Object.values(d.value.aging).reduce(
 
 <template>
   <CrmShell title="Finance">
-    <div v-if="d" class="page" style="max-width: 1360px">
+    <div v-if="d" class="page">
       <div class="page-head"><div><h1>Finance</h1><div class="muted">The finance system stays the source of truth; the CRM requests invoices and mirrors their status.</div></div></div>
-      <div class="grid-auto" style="grid-template-columns: repeat(auto-fit, minmax(150px, 1fr))">
+      <div class="kpis">
         <div class="card kpi"><span class="label">Collected this month</span><span class="v" style="color: var(--green-ink)">{{ crmMoney(d.collected_this_month, false) }}</span></div>
         <div class="card kpi"><span class="label">Outstanding</span><span class="v">{{ crmMoney(agingTotal, false) }}</span></div>
         <div class="card kpi"><span class="label">Not yet due</span><span class="v">{{ crmMoney(d.aging.current, false) }}</span></div>
@@ -33,7 +33,7 @@ const agingTotal = computed(() => d.value ? Object.values(d.value.aging).reduce(
         <h2>Ready to bill <span class="chip">{{ d.ready_to_bill.length }}</span></h2>
         <div v-for="b in d.ready_to_bill" :key="b.id" class="list-row">
           <div class="grow"><strong>{{ b.project?.client?.company_name }}</strong> · {{ b.label }}<div class="muted small">Due {{ crmDate(b.due_date) }} · {{ crmLabel(b.trigger_type) }}</div></div>
-          <span class="mono" style="font-weight: 600">{{ crmMoney(b.amount, false) }}</span>
+          <span class="num">{{ crmMoney(b.amount, false) }}</span>
           <span v-if="!b.readiness?.ok" class="chip c-warn">{{ b.readiness?.why }}</span>
           <button class="btn btn-primary" :disabled="busy || !b.readiness?.ok" @click="request(b)">Request invoice</button>
         </div>

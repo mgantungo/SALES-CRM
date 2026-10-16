@@ -68,14 +68,14 @@ const jobs = async () => { const r = await run(() => api.post('/admin/run-jobs')
 
 <template>
   <CrmShell title="Admin">
-    <div class="page" style="max-width: 1300px">
+    <div class="page">
       <h1>CRM administration</h1>
       <div class="tabs" role="tablist">
         <button v-for="[k, l] in [['people', 'People'], ['teams', 'Teams'], ['catalogue', 'Catalogue'], ['setup', 'Setup & migration'], ['audit', 'Audit trail']]" :key="k" class="tab" role="tab" :aria-selected="tab === k" @click="tab = k">{{ l }}</button>
       </div>
 
       <section v-if="tab === 'people'" class="card pad stack">
-        <div class="row-wrap"><span class="muted grow">Each login is linked to one VGAMS sales person (or none, for finance, projects and admin). The sales person records themselves are never changed.</span><input v-model="q" class="search" style="width: 260px" placeholder="Search logins" aria-label="Search logins"></div>
+        <div class="row-wrap"><span class="muted grow">Each login is linked to one VGAMS sales person (or none, for finance, projects and admin). The sales person records themselves are never changed.</span><input v-model="q" class="search search-inline" placeholder="Search logins" aria-label="Search logins"></div>
         <div class="table-wrap">
           <table class="table" style="min-width: 760px">
             <thead><tr><th>Login</th><th>CRM role</th><th>Sales person</th><th>Team</th><th class="r">Discount limit</th><th /></tr></thead>

@@ -125,7 +125,7 @@ const createProject = async () => {
               <tbody>
                 <tr v-for="(g, i) in groups" :key="i">
                   <td><input v-model="g.pick" type="checkbox" :aria-label="`Select ${g.name}`" style="width: 20px; height: 20px"></td>
-                  <td><input v-model="g.name" class="input" style="min-height: 40px"></td>
+                  <td><input v-model="g.name" class="input input-sm"></td>
                   <td class="muted small">{{ g.line_ids.map((id: string) => lineOf(id)?.description).join(', ') }}</td>
                   <td class="mono r">{{ crmFull(groupNet(g)) }}</td>
                   <td><button v-if="g.line_ids.length > 1" class="btn btn-ghost" @click="split(g)">Split</button></td>

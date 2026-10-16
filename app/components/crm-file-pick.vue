@@ -31,6 +31,6 @@ const onChange = async (e: Event) => {
 </template>
 
 <style scoped>
-.file-pick { display: flex; align-items: center; gap: 12px; min-height: 56px; padding: 0 16px; border: 1.5px dashed var(--field); border-radius: 12px; background: var(--panel); cursor: pointer; font-weight: 600; }
+.file-pick { display: flex; align-items: center; gap: 12px; min-height: calc(var(--ctl) + 12px); padding: 0 16px; border: 1.5px dashed var(--field); border-radius: var(--radius); background: var(--panel); cursor: pointer; font-weight: 600; }
 .file-pick.done { border-style: solid; border-color: #B7DDC6; background: #F5FBF7; color: var(--green-ink); }
 </style>

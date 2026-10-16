@@ -23,5 +23,6 @@ const segs = computed(() => STEPS.map((label, i) => {
 </template>
 
 <style scoped>
+.steps-l .seg { flex: none; }
 .steps-l { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 4px; }
 </style>

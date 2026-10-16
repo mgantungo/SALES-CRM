@@ -5,7 +5,7 @@ defineProps<{ message: string; message2?: string | null; tone?: 'ok' | 'wait' }>
 <template>
   <div class="done stack-lg">
     <div class="done-check" :class="{ wait: tone === 'wait' }"><CrmIcon :name="tone === 'wait' ? 'approvals' : 'check'" :size="44" /></div>
-    <h1 style="font-size: 24px">{{ message }}</h1>
+    <h1>{{ message }}</h1>
     <p v-if="message2" style="margin: 0; color: var(--ink-2); max-width: 380px">{{ message2 }}</p>
     <div class="stack" style="width: 100%; max-width: 380px; margin-top: 8px"><slot /></div>
   </div>

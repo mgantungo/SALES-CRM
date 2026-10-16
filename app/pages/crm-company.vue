@@ -17,9 +17,9 @@ const decide = async (dec: any, action: string, leadId?: string) => {
 
 <template>
   <CrmShell title="Client coverage">
-    <div v-if="d" class="page" style="max-width: 1480px">
+    <div v-if="d" class="page page-wide">
       <div><div class="muted">Whole company · {{ d.teams.length }} teams</div><h1>Client coverage</h1></div>
-      <div class="grid-auto" style="grid-template-columns: repeat(auto-fit, minmax(170px, 1fr))">
+      <div class="kpis">
         <div class="card kpi"><span class="label">Clients</span><span class="v">{{ d.kpis.clients }}</span><span class="muted small">with an owner or CRM profile</span></div>
         <div class="card kpi"><span class="label">Salespeople</span><span class="v">{{ d.kpis.people }}</span><span class="muted small">{{ d.kpis.per_person }} clients each on average</span></div>
         <div class="card kpi" :style="{ borderColor: d.kpis.no_owner ? 'var(--amber-line)' : undefined }"><span class="label">No owner</span><span class="v" style="color: var(--amber-ink)">{{ d.kpis.no_owner }}</span></div>
@@ -38,7 +38,7 @@ const decide = async (dec: any, action: string, leadId?: string) => {
                 <td><div class="row" style="gap: 8px"><div class="bar grow" style="height: 8px"><i :style="{ width: Math.min(100, (t.per_person / 20) * 100) + '%', background: t.per_person > 16 ? 'var(--orange)' : 'var(--blue)' }" /></div><span class="mono" style="width: 34px; text-align: right; font-weight: 600">{{ t.per_person }}</span></div></td>
                 <td class="mono r" :style="{ color: t.cold ? 'var(--red-ink)' : undefined, fontWeight: 600 }">{{ t.cold }}</td>
                 <td class="mono r">{{ crmMoney(t.pipeline, false) }}</td>
-                <td class="r"><NuxtLink :to="{ path: '/crm/team', query: { team: t.id } }" class="btn">Open</NuxtLink></td>
+                <td class="r"><NuxtLink :to="{ path: '/crm/team', query: { team: t.id } }" class="btn btn-sm">Open</NuxtLink></td>
               </tr>
             </tbody>
           </table>
@@ -47,7 +47,7 @@ const decide = async (dec: any, action: string, leadId?: string) => {
 
       <div class="row-wrap" style="align-items: flex-start; gap: 18px">
         <section class="card pad stack" style="flex: 2 1 600px; min-width: 0">
-          <div class="row-wrap"><h2 class="grow">Who looks after a client?</h2><label class="sr" for="lq">Client or person</label><input id="lq" v-model="q" class="search" style="width: 320px" placeholder="Type a client or a person"></div>
+          <div class="row-wrap"><h2 class="grow">Who looks after a client?</h2><label class="sr" for="lq">Client or person</label><input id="lq" v-model="q" class="search search-inline" placeholder="Type a client or a person"></div>
           <div class="table-wrap">
             <table class="table" style="min-width: 640px">
               <thead><tr><th>Client</th><th>Account lead</th><th>Units serving them</th><th class="r">Last contact</th><th class="r">Revenue, 12 mo</th></tr></thead>

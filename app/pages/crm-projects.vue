@@ -18,11 +18,11 @@ onMounted(load)
           <button v-for="s in ['active', 'completed', 'all']" :key="s" class="pick" :aria-pressed="state === s" @click="state = s">{{ crmLabel(s) }}</button>
         </div>
       </div>
-      <div v-if="loading" class="muted">Loading…</div>
+      <div v-if="loading" class="loading">Loading…</div>
       <div v-else class="grid-auto" style="grid-template-columns: repeat(auto-fill, minmax(300px, 1fr))">
         <NuxtLink v-for="p in items" :key="p.id" :to="`/crm/projects/${p.id}`" class="card click stack" style="padding: 16px; gap: 8px">
           <span class="muted small">{{ p.client?.company_name }}</span>
-          <strong style="font-size: 16px">{{ p.name }}</strong>
+          <strong style="font-size: calc(var(--fs) + 1px)">{{ p.name }}</strong>
           <div class="row-wrap">
             <span class="chip" :class="CRM_STATE_CHIP[p.state]">{{ crmLabel(p.state) }}</span>
             <span class="chip" :class="{ on_track: 'c-ok', at_risk: 'c-warn', off_track: 'c-bad' }[p.health as string]">{{ crmLabel(p.health) }}</span>

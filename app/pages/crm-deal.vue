@@ -58,7 +58,7 @@ const ROLE: Record<string, string> = { originator: 'Found the deal', account_lea
               <NuxtLink :to="`/crm/clients/${o.client.id}`" class="muted">{{ o.client.company_name }}</NuxtLink>
               <h1 style="margin-top: 4px">{{ o.title }}</h1>
             </div>
-            <span class="mono" style="font-size: 22px; font-weight: 600">{{ crmMoney(o.expected_revenue) }}</span>
+            <span class="num-lg">{{ crmMoney(o.expected_revenue) }}</span>
           </div>
           <CrmSteps :step="d.step" labels />
           <div class="row-wrap">

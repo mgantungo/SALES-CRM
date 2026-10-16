@@ -16,7 +16,7 @@ const print = () => window.print()
   <div v-if="d" class="doc">
     <header class="between" style="align-items: flex-start">
       <div class="row"><div class="logo">VG</div><div><strong style="font-size: 18px">Vision Group</strong><div class="muted">Integrated media proposal</div></div></div>
-      <div style="text-align: right"><div class="mono" style="font-weight: 600">{{ d.proposal.reference }} · v{{ d.version.version_number }}</div><div class="muted">{{ crmDate(d.version.createdAt) }}</div></div>
+      <div style="text-align: right"><div class="num">{{ d.proposal.reference }} · v{{ d.version.version_number }}</div><div class="muted">{{ crmDate(d.version.createdAt) }}</div></div>
     </header>
     <section class="stack" style="gap: 4px">
       <span class="label">Prepared for</span>

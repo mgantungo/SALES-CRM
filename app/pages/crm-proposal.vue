@@ -86,7 +86,7 @@ const marginFloor = computed(() => d.value?.settings?.min_margin_pct || 35)
 
 <template>
   <CrmShell :title="p?.reference || 'Quote'" back>
-    <div v-if="d" class="page" style="max-width: 1360px">
+    <div v-if="d" class="page">
       <div class="page-head">
         <div>
           <NuxtLink :to="`/crm/clients/${p.client.id}`" class="muted">{{ p.client.company_name }}</NuxtLink>
@@ -113,7 +113,7 @@ const marginFloor = computed(() => d.value?.settings?.min_margin_pct || 35)
 
       <div v-if="d.diff && (d.diff.changes.length || d.diff.lines.length)" class="card pad stack" style="gap: 6px">
         <span class="label">What changed since v{{ v.version_number - 1 }}<template v-if="v.change_reason"> · {{ v.change_reason }}</template></span>
-        <div v-for="c in d.diff.changes" :key="c.field" class="row-wrap"><strong style="width: 180px">{{ c.label }}</strong><span class="mono">{{ typeof c.from === 'number' && c.from > 1000 ? crmMoney(c.from) : c.from }}</span><span>→</span><span class="mono" style="font-weight: 600">{{ typeof c.to === 'number' && c.to > 1000 ? crmMoney(c.to) : c.to }}</span></div>
+        <div v-for="c in d.diff.changes" :key="c.field" class="row-wrap"><strong style="width: 180px">{{ c.label }}</strong><span class="mono">{{ typeof c.from === 'number' && c.from > 1000 ? crmMoney(c.from) : c.from }}</span><span>→</span><span class="num">{{ typeof c.to === 'number' && c.to > 1000 ? crmMoney(c.to) : c.to }}</span></div>
         <div v-for="(c, i) in d.diff.lines" :key="i" class="muted">{{ crmLabel(c.change) }}: {{ c.description }}</div>
       </div>
 
@@ -128,11 +128,11 @@ const marginFloor = computed(() => d.value?.settings?.min_margin_pct || 35)
                   <tr v-for="l in v.lines" :key="l.id">
                     <td><strong>{{ l.product?.name || l.description }}</strong><div class="muted small">{{ l.business_unit?.name }}<template v-if="l.provider"> · {{ l.provider.name }}</template></div></td>
                     <td class="r">
-                      <input v-if="editable" class="input mono" style="width: 76px; min-height: 40px; text-align: right" :value="l.quantity" inputmode="decimal" :aria-label="`Quantity for ${l.description}`" @change="updateLine(l, { quantity: ($event.target as HTMLInputElement).value })">
+                      <input v-if="editable" class="input mono" style="width: 76px; min-height: var(--ctl-sm); text-align: right" :value="l.quantity" inputmode="decimal" :aria-label="`Quantity for ${l.description}`" @change="updateLine(l, { quantity: ($event.target as HTMLInputElement).value })">
                       <span v-else class="mono">{{ l.quantity }}</span>
                     </td>
                     <td class="r">
-                      <input v-if="editable" class="input mono" style="width: 130px; min-height: 40px; text-align: right" :value="l.unit_price" inputmode="numeric" :aria-label="`Unit price for ${l.description}`" @change="updateLine(l, { unit_price: ($event.target as HTMLInputElement).value })">
+                      <input v-if="editable" class="input mono" style="width: 130px; min-height: var(--ctl-sm); text-align: right" :value="l.unit_price" inputmode="numeric" :aria-label="`Unit price for ${l.description}`" @change="updateLine(l, { unit_price: ($event.target as HTMLInputElement).value })">
                       <span v-else class="mono">{{ crmFull(l.unit_price) }}</span>
                     </td>
                     <td class="mono r muted">{{ l.allocated_discount ? `−${crmFull(l.allocated_discount)}` : '0' }}</td>
@@ -142,7 +142,7 @@ const marginFloor = computed(() => d.value?.settings?.min_margin_pct || 35)
                       {{ liveLine(l.id).margin }}%<div v-if="liveLine(l.id).below_cost" class="small" style="font-family: var(--sans)">Below cost</div>
                     </td>
                     <td class="small">
-                      <button class="btn btn-ghost" style="min-height: 36px; padding: 0 6px; font-weight: 500; text-align: left; white-space: normal" :disabled="!editable" @click="openContrib(l)">
+                      <button class="btn btn-ghost" style="min-height: var(--ctl-sm); padding: 0 6px; font-weight: 500; text-align: left; white-space: normal" :disabled="!editable" @click="openContrib(l)">
                         {{ (l.contributors || []).map((c: any) => `${c.sales_person?.name?.split(' ')[0]} ${c.percentage}%`).join(' · ') || 'Set credit' }}
                       </button>
                     </td>
@@ -216,7 +216,7 @@ const marginFloor = computed(() => d.value?.settings?.min_margin_pct || 35)
             <span class="label" style="margin-bottom: 6px">Totals · UGX</span>
             <div class="between tot"><span>Lines total</span><span class="mono">{{ crmFull(v.list_total) }}</span></div>
             <div class="between tot"><span>Discount</span><span class="mono">−{{ crmFull(v.discount_total) }} <span class="muted">({{ v.discount_pct }}%)</span></span></div>
-            <div class="between tot strong"><strong>Client pays</strong><strong class="mono" style="font-size: 19px">{{ crmFull(v.net_total) }}</strong></div>
+            <div class="between tot strong"><strong>Client pays</strong><strong class="num-lg">{{ crmFull(v.net_total) }}</strong></div>
             <template v-if="showCost">
               <div class="between tot"><span>Cost</span><span class="mono">{{ crmFull(v.cost_total) }}</span></div>
               <div class="between tot strong"><strong>Contribution</strong><strong class="mono">{{ crmFull(v.contribution_total) }}</strong></div>

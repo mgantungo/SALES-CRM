@@ -61,7 +61,7 @@ const send = async () => {
           <button v-for="p in products" :key="p.id" class="prod" :aria-pressed="picked.includes(p.id)" @click="toggle(p.id)">
             <span class="box"><CrmIcon v-if="picked.includes(p.id)" name="check" :size="16" /></span>
             <span class="grow"><strong>{{ p.short_label || p.name }}</strong><span class="muted" style="display: block">{{ p.package_note || p.business_unit?.name }}</span></span>
-            <span class="mono" style="font-weight: 600">{{ crmMoney(p.list_price * (p.default_quantity || 1), false) }}</span>
+            <span class="num">{{ crmMoney(p.list_price * (p.default_quantity || 1), false) }}</span>
           </button>
           <CrmEmpty v-if="!products.length" text="The catalogue is empty. Ask your product manager to add products." />
         </div>
@@ -73,7 +73,7 @@ const send = async () => {
           </div>
         </div>
         <div class="sticky-foot">
-          <div class="between"><span class="muted">Client pays</span><span class="mono" style="font-size: 22px; font-weight: 600">{{ crmMoney(total) }}</span></div>
+          <div class="between"><span class="muted">Client pays</span><span class="num-lg">{{ crmMoney(total) }}</span></div>
           <button class="btn btn-primary btn-lg" :disabled="busy || !client || !picked.length" @click="send">{{ label }}</button>
         </div>
       </template>
@@ -82,8 +82,10 @@ const send = async () => {
 </template>
 
 <style scoped>
-.prod { display: flex; align-items: center; gap: 12px; min-height: 62px; padding: 0 14px; border-radius: 12px; border: 1.5px solid var(--field); background: var(--panel); text-align: left; cursor: pointer; }
+.prod { display: flex; align-items: center; gap: 12px; min-height: calc(var(--ctl) + 16px); padding: 0 14px; border-radius: var(--radius); border: 1.5px solid var(--field); background: var(--panel); text-align: left; cursor: pointer; }
+.prod:hover { border-color: #B9B9B0; }
 .prod[aria-pressed='true'] { border-color: var(--blue); background: #F0F4FE; }
 .box { width: 24px; height: 24px; border-radius: 6px; border: 1.5px solid var(--field); display: flex; align-items: center; justify-content: center; flex: none; color: #fff; }
+.prod:hover { border-color: #B9B9B0; }
 .prod[aria-pressed='true'] .box { background: var(--blue); border-color: var(--blue); }
 </style>

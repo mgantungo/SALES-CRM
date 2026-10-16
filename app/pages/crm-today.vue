@@ -44,11 +44,11 @@ const pct = (a: number, b: number) => (b ? Math.min(100, Math.round((a / b) * 10
         <NuxtLink v-if="isManager" to="/crm/team" class="btn">Open team map</NuxtLink>
       </div>
 
-      <div v-if="!data" class="muted">Loading…</div>
+      <div v-if="!data" class="loading">Loading…</div>
       <template v-else>
         <NuxtLink v-if="data.earnings" to="/crm/earnings" class="earn">
           <span class="grow">Earned this month</span>
-          <span class="mono" style="font-weight: 600; font-size: 18px">{{ crmMoney(data.earnings.month_accrued) }}</span>
+          <span class="num-md">{{ crmMoney(data.earnings.month_accrued) }}</span>
           <CrmIcon name="next" :size="18" />
         </NuxtLink>
 
@@ -64,12 +64,21 @@ const pct = (a: number, b: number) => (b ? Math.min(100, Math.round((a / b) * 10
               <button class="btn-act" @click="act(t)">{{ t.button }}</button>
             </div>
             <div v-if="!data.todos.length" class="card pad" style="text-align: center; color: var(--green-ink); font-weight: 700">All clear for today. Nice work.</div>
+            <template v-if="dash && data.deals.length">
+              <h2 class="label" style="margin-top: 6px">My deals</h2>
+              <NuxtLink v-for="d in data.deals" :key="d.id" :to="`/crm/deals/${d.id}`" class="card deal click">
+                <div class="between"><strong>{{ d.client.name }}</strong><span class="num">{{ crmMoney(d.value, false) }}</span></div>
+                <CrmSteps :step="d.step" />
+                <span class="muted">{{ d.step.label }} · {{ d.status_line }}</span>
+                <span v-if="d.overlap" class="chip c-warn" style="align-self: flex-start">Another team is also talking to them</span>
+              </NuxtLink>
+            </template>
           </section>
 
           <section class="stack">
             <div v-if="data.month.target" class="card pad stack" style="gap: 8px">
               <div class="label">My month</div>
-              <div class="between"><span>Won</span><span class="mono" style="font-size: 20px; font-weight: 600">{{ crmMoney(data.month.won, false) }} <span class="muted">of {{ crmMoney(data.month.target, false) }}</span></span></div>
+              <div class="between"><span>Won</span><span class="num-lg">{{ crmMoney(data.month.won, false) }} <span class="muted">of {{ crmMoney(data.month.target, false) }}</span></span></div>
               <div class="bar"><i :style="{ width: pct(data.month.won, data.month.target) + '%', background: 'var(--green)' }" /></div>
               <span class="muted">{{ data.month.to_go ? `${crmMoney(data.month.to_go)} to go` : 'Target reached 🎯' }}</span>
             </div>
@@ -84,15 +93,15 @@ const pct = (a: number, b: number) => (b ? Math.min(100, Math.round((a / b) * 10
               </div>
               <div class="row" style="gap: 20px; border-top: 1px solid var(--line-2); padding-top: 10px">
                 <div><div class="label">Won this month</div><div class="mono" style="font-weight: 600; color: var(--green-ink)">{{ dash.won.count }} · {{ crmMoney(dash.won.value, false) }}</div></div>
-                <div><div class="label">Lost</div><div class="mono" style="font-weight: 600">{{ dash.lost.count }} · {{ crmMoney(dash.lost.value, false) }}</div></div>
-                <div><div class="label">Overdue tasks</div><div class="mono" style="font-weight: 600">{{ dash.overdue_tasks }}</div></div>
+                <div><div class="label">Lost</div><div class="num">{{ dash.lost.count }} · {{ crmMoney(dash.lost.value, false) }}</div></div>
+                <div><div class="label">Overdue tasks</div><div class="num">{{ dash.overdue_tasks }}</div></div>
               </div>
             </div>
 
-            <template v-if="data.deals.length">
-              <h2 class="label">My deals</h2>
+            <template v-if="!dash && data.deals.length">
+              <h2 class="label" >My deals</h2>
               <NuxtLink v-for="d in data.deals" :key="d.id" :to="`/crm/deals/${d.id}`" class="card deal click">
-                <div class="between"><strong>{{ d.client.name }}</strong><span class="mono" style="font-weight: 600">{{ crmMoney(d.value, false) }}</span></div>
+                <div class="between"><strong>{{ d.client.name }}</strong><span class="num">{{ crmMoney(d.value, false) }}</span></div>
                 <CrmSteps :step="d.step" />
                 <span class="muted">{{ d.step.label }} · {{ d.status_line }}</span>
                 <span v-if="d.overlap" class="chip c-warn" style="align-self: flex-start">Another team is also talking to them</span>
@@ -106,7 +115,7 @@ const pct = (a: number, b: number) => (b ? Math.min(100, Math.round((a / b) * 10
 </template>
 
 <style scoped>
-.earn { display: flex; align-items: center; gap: 10px; min-height: 54px; padding: 0 16px; border-radius: 14px; background: var(--ink); color: #fff; text-decoration: none; }
+.earn { display: flex; align-items: center; gap: 10px; min-height: calc(var(--ctl-lg) + 4px); padding: 0 16px; border-radius: var(--radius-lg); background: var(--ink); color: #fff; text-decoration: none; }
 .earn:hover { color: #fff; background: #2C313C; }
 .earn .grow { color: #D5D8DE; }
 .cnt { background: var(--orange); color: #fff; border-radius: 999px; padding: 0 7px; font-size: 11px; letter-spacing: 0; }

@@ -1,9 +1,12 @@
 <script setup lang="ts">
 definePageMeta({ path: '/crm/clients' })
 const api = useCrmApi()
+const route = useRoute()
 const { isSales, isManager } = useCrmMe()
 const { busy, run } = useCrmAction()
-const q = ref('')
+// the search box in the top bar opens this page with ?q=
+const q = ref((route.query.q as string) || '')
+watch(() => route.query.q, (v) => { q.value = (v as string) || '' })
 const scope = ref(isSales.value ? 'mine' : 'visible')
 const items = ref<any[]>([])
 const total = ref(0)
@@ -44,34 +47,36 @@ const create = async (force = false) => {
     <div class="page">
       <div class="page-head">
         <div><h1>{{ scope === 'mine' ? 'My clients' : 'Clients' }}</h1><div class="muted">{{ total }} {{ scope === 'mine' ? 'that you look after' : 'you can see' }}</div></div>
-        <div class="row-wrap">
-          <div v-if="!isSales" role="group" aria-label="Scope" class="row-wrap">
-            <button class="pick" :aria-pressed="scope === 'mine'" @click="scope = 'mine'">Mine</button>
-            <button class="pick" :aria-pressed="scope === 'visible'" @click="scope = 'visible'">{{ isManager ? 'My team' : 'All I can see' }}</button>
-          </div>
-          <button class="btn btn-primary" @click="open = true"><CrmIcon name="plus" :size="18" />New client</button>
+        <button class="btn btn-primary" @click="open = true"><CrmIcon name="plus" :size="18" />New client</button>
+      </div>
+      <div class="row-wrap">
+        <label class="sr" for="cq">Search clients</label>
+        <input id="cq" v-model="q" class="search grow" style="flex: 1 1 280px; max-width: 520px" placeholder="Search by name, phone, email, TIN or BC number">
+        <div v-if="!isSales" role="group" aria-label="Scope" class="seg-group">
+          <button class="pick" :aria-pressed="scope === 'mine'" @click="scope = 'mine'">Mine</button>
+          <button class="pick" :aria-pressed="scope === 'visible'" @click="scope = 'visible'">{{ isManager ? 'My team' : 'All I can see' }}</button>
         </div>
       </div>
-      <label class="sr" for="cq">Search clients</label>
-      <input id="cq" v-model="q" class="search" placeholder="Search by name, phone, email, TIN or BC number">
 
-      <div class="card" style="padding: 4px 16px">
-        <div v-if="loading" class="muted" style="padding: 14px 0">Loading…</div>
-        <NuxtLink v-for="c in items" :key="c.id" :to="`/crm/clients/${c.id}`" class="list-row click">
-          <span class="av" :style="{ background: crmColor(c.company_name) }">{{ crmInitials(c.company_name) }}</span>
+      <div class="card clist">
+        <div class="crow chead hide-mobile" aria-hidden="true"><span /><span>Client</span><span>Last contact</span><span>Account lead</span><span class="r">Open deals</span><span /><span /></div>
+        <div v-if="loading" class="loading">Loading…</div>
+        <NuxtLink v-for="c in items" :key="c.id" :to="`/crm/clients/${c.id}`" class="crow click">
+          <span class="av av-sm" :style="{ background: crmColor(c.company_name) }">{{ crmInitials(c.company_name) }}</span>
           <div class="grow">
-            <div style="font-weight: 700">{{ c.company_name }}</div>
-            <div class="muted row" style="gap: 6px">
-              <span class="dot" :class="`h-${c.health}`" /><span>{{ crmAgo(c.last_contact_days) }}</span>
-              <span v-if="c.lead" class="hide-mobile">· Lead: {{ c.lead.name }}</span>
-            </div>
+            <div class="ellipsis" style="font-weight: 600">{{ c.company_name }}</div>
+            <div class="muted row hide-desk" style="gap: 6px"><span class="dot" :class="`h-${c.health}`" /><span>{{ crmAgo(c.last_contact_days) }}</span></div>
           </div>
-          <span v-if="c.open_deals" class="mono hide-mobile" style="font-weight: 600">{{ crmMoney(c.open_value) }}</span>
-          <span v-if="c.my_role === 'account_lead'" class="chip c-sales hide-mobile">Account lead</span>
-          <span v-else-if="c.lifecycle === 'prospect'" class="chip">Prospect</span>
-          <CrmIcon name="next" :size="18" />
+          <span class="muted row hide-mobile" style="gap: 6px"><span class="dot" :class="`h-${c.health}`" />{{ crmAgo(c.last_contact_days) }}</span>
+          <span class="hide-mobile ellipsis">{{ c.lead?.name || '—' }}</span>
+          <span class="num r hide-mobile">{{ c.open_deals ? crmMoney(c.open_value) : '' }}</span>
+          <span>
+            <span v-if="c.my_role === 'account_lead'" class="chip c-sales hide-mobile">Account lead</span>
+            <span v-else-if="c.lifecycle === 'prospect'" class="chip">Prospect</span>
+          </span>
+          <CrmIcon name="next" :size="16" class="chev" />
         </NuxtLink>
-        <div v-if="!loading && !items.length" class="muted" style="padding: 18px 0; text-align: center">No clients found.</div>
+        <div v-if="!loading && !items.length" class="loading">No clients found{{ q ? ` for “${q}”` : '' }}.</div>
       </div>
     </div>
 
@@ -99,3 +104,14 @@ const create = async (force = false) => {
     </CrmModal>
   </CrmShell>
 </template>
+
+<style scoped>
+.clist { padding: 0 6px; }
+.crow { display: flex; align-items: center; gap: 12px; padding: 10px 10px; border-top: 1px solid var(--line-2); border-radius: 8px; }
+.crow:first-child, .chead + .crow, .loading + .crow { border-top-color: transparent; }
+.chead { font-size: var(--fs-xs); font-weight: 600; color: var(--muted); padding-top: 10px; padding-bottom: 8px; border-top: 0; }
+.chev { color: var(--muted); }
+@media (min-width: 900px) {
+  .crow { display: grid; grid-template-columns: 28px minmax(220px, 2.2fr) minmax(140px, 1fr) minmax(140px, 1fr) 120px 110px 16px; gap: 14px; }
+}
+</style>

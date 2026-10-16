@@ -88,7 +88,7 @@ const canBill = computed(() => ['finance', 'executive', 'senior_manager', 'proje
 
 <template>
   <CrmShell :title="p?.name || 'Project'" back="/crm/projects">
-    <div v-if="d" class="page" style="max-width: 1360px">
+    <div v-if="d" class="page">
       <section class="card pad-lg stack">
         <div class="between" style="align-items: flex-start; flex-wrap: wrap">
           <div>
@@ -107,11 +107,11 @@ const canBill = computed(() => ['finance', 'executive', 'senior_manager', 'proje
         </div>
         <span class="muted small">{{ d.closure.text }}</span>
         <div class="grid-auto" style="grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); border-top: 1px solid var(--line-2); padding-top: 14px">
-          <div><div class="label">Contracted</div><div class="mono" style="font-size: 19px; font-weight: 600">{{ crmMoney(d.finance.contracted, false) }}</div></div>
-          <div><div class="label">Invoiced</div><div class="mono" style="font-size: 19px; font-weight: 600">{{ crmMoney(d.finance.invoiced, false) }}</div></div>
-          <div><div class="label">Received</div><div class="mono" style="font-size: 19px; font-weight: 600">{{ crmMoney(d.finance.received, false) }}</div></div>
-          <div><div class="label">Overdue</div><div class="mono" style="font-size: 19px; font-weight: 600" :style="{ color: d.finance.overdue ? 'var(--red-ink)' : undefined }">{{ crmMoney(d.finance.overdue, false) }}</div></div>
-          <div v-if="d.costs.budget !== undefined"><div class="label">Cost vs budget</div><div class="mono" style="font-size: 19px; font-weight: 600">{{ crmMoney(d.costs.actual, false) }} / {{ crmMoney(d.costs.budget, false) }}</div></div>
+          <div><div class="label">Contracted</div><div class="num-md">{{ crmMoney(d.finance.contracted, false) }}</div></div>
+          <div><div class="label">Invoiced</div><div class="num-md">{{ crmMoney(d.finance.invoiced, false) }}</div></div>
+          <div><div class="label">Received</div><div class="num-md">{{ crmMoney(d.finance.received, false) }}</div></div>
+          <div><div class="label">Overdue</div><div class="num-md" :style="{ color: d.finance.overdue ? 'var(--red-ink)' : undefined }">{{ crmMoney(d.finance.overdue, false) }}</div></div>
+          <div v-if="d.costs.budget !== undefined"><div class="label">Cost vs budget</div><div class="num-md">{{ crmMoney(d.costs.actual, false) }} / {{ crmMoney(d.costs.budget, false) }}</div></div>
         </div>
       </section>
 
@@ -145,7 +145,7 @@ const canBill = computed(() => ['finance', 'executive', 'senior_manager', 'proje
           </div>
           <div v-for="m in w.milestones" :key="m.id" class="row small">
             <CrmIcon :name="m.state === 'done' ? 'check' : 'today'" :size="16" /><span class="grow">{{ m.name }} · {{ crmDate(m.revised_date || m.baseline_date) }}<template v-if="m.is_billing_trigger"> · bills {{ crmMoney(m.billing_amount) }}</template></span>
-            <button v-if="m.state !== 'done' && d.can.manage" class="btn" style="min-height: 36px" @click="msDone(m)">Reached</button>
+            <button v-if="m.state !== 'done' && d.can.manage" class="btn btn-sm" @click="msDone(m)">Reached</button>
           </div>
           <div v-if="w.completion_note" class="soft small">{{ w.completion_note }}</div>
           <div v-if="d.can.manage && !['completed', 'cancelled'].includes(w.state)" class="row-wrap">
@@ -247,7 +247,7 @@ const canBill = computed(() => ['finance', 'executive', 'senior_manager', 'proje
 </template>
 
 <style scoped>
-.tl-row { display: grid; grid-template-columns: 220px 1fr; gap: 12px; align-items: center; min-height: 54px; border-top: 1px solid var(--line-2); }
+.tl-row { display: grid; grid-template-columns: 220px 1fr; gap: 12px; align-items: center; min-height: calc(var(--ctl) + 10px); border-top: 1px solid var(--line-2); }
 .tl-row.head { min-height: 32px; border-top: 0; }
 .tl-months { display: flex; }
 .tl-months span { flex: 1; text-align: center; font-size: 12px; color: var(--muted); font-weight: 600; }
